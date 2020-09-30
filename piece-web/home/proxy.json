@@ -1,0 +1,14 @@
+[
+  {
+    "path": "api",
+    "target": "http://116.228.53.133:10240/api/"
+  },
+  {
+    "path": "dev-api",
+    "target": "http://192.168.1.233:10240/api/"
+  },
+  {
+    "path": "pro-api",
+    "target": "http://filbox.keystore.com/api/"
+  }
+]
