@@ -1,0 +1,37 @@
+{
+  "name": "piece",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "cross-env NODE_ENV=development PORT=8000 node node_modules/@fay-next/config/devServer/config.js --watch",
+    "build": "next build",
+    "pro": "npm run clear && next build && cross-env NODE_ENV=production PORT=3000 node node_modules/@fay-next/config/devServer/config.js",
+    "next-pro": "npm run clear && next build && next start",
+    "export": "npm run clear && next build && next export && npm run dist",
+    "dist": "cp -r ./out/_next ./out/404 ./out/sw.js ./out/m && rm -rf ../dist/m/* && cp -r ./out/m/* ../dist/m/",
+    "clear": "rm -rf .next out",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@fay-react/lib": "0.0.1-alpha.33",
+    "@material-ui/core": "^4.11.0",
+    "@material-ui/icons": "^4.9.1",
+    "@material-ui/lab": "^4.0.0-alpha.51",
+    "moment": "^2.26.0",
+    "qrcode.react": "^1.0.0",
+    "react-infinite-scroll-component": "^5.0.5",
+    "react-number-format": "^4.4.1",
+    "react-swipeable-views": "^0.13.9",
+    "rxjs": "^6.5.5",
+    "swiper": "^6.1.1"
+  },
+  "devDependencies": {
+    "@fay-next/config": "0.0.1-alpha.7",
+    "@types/react-swipeable-views": "^0.13.0",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1"
+  }
+}

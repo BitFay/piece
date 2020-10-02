@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Loading</title>
+    <style>
+        body {
+            background: #FFFFFF;
+            margin: 0;
+        }
+        
+        .loading-content {
+            display: flex;
+            justify-content: space-between;
+            align-content: center;
+            align-items: center;
+            height: 40px;
+            padding: 24px;
+        }
+        
+        .loading-content-left {
+            width: 40px;
+            height: 100%;
+        }
+        
+        .rings {
+            position: absolute;
+            top: 0;
+            left: 21px;
+        }
+        
+        .loading-content-center {
+            width: calc(100% - 60px);
+            height: 100%;
+            font-size: 16px;
+            color: #212121;
+        }
+        
+        .loading-content-center-top {
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .loading-content-right {
+            width: 48px;
+        }
+        
+        .loading-content-center-process {
+            height: 4px;
+            background: #D8D8D8;
+            border-radius: 4px;
+            margin-top: 12px;
+        }
+        
+        .loading-content-center-process-bar {
+            height: 4px;
+            background: #0060FF;
+            border-radius: 4px;
+            margin-top: 12px;
+        }
+        
+        .loading-content-right-button {
+            min-width: 48px;
+            height: 24px;
+            border: 1px solid #979797;
+            border-radius: 4px;
+            text-align: center;
+            color: #212121;
+            font-size: 12px;
+            line-height: 24px;
+            cursor: pointer;
+        }
+        
+        .loading-content-right-button:hover {
+            border: 1px solid #0060FF;
+            color: #0060FF;
+        }
+    </style>
+</head>
+
+<body>
+    <img src="../rings.svg" class="rings" />
+    <div class="loading-content">
+        <div class="loading-content-left">
+            <img src="../logo.png" width="100%" />
+        </div>
+        <div class="loading-content-center">
+            <div class="loading-content-center-top">
+                <div id="info"></div>
+                <div class="loading-content-right-button" id="button" style="display: none">Reset</div>
+            </div>
+            <div class="loading-content-center-process">
+                <div class="loading-content-center-process-bar" id="bar" style="width: 0"></div>
+            </div>
+        </div>
+        <!--    <div class="loading-content-right">-->
+        <!--      <div class="loading-content-right-button" id="button" style="display: none">Reset</div>-->
+        <!--    </div>-->
+    </div>
+    <script>
+        const {
+            ipcRenderer
+        } = require('electron');
+        const barDom = document.getElementById('bar');
+        const infoDom = document.getElementById('info');
+        const buttonDom = document.getElementById('button');
+        const Language = {
+            "en-US": {
+                "check": "Checking for update",
+                "offline": "Please check the network",
+                "fail": "Update failed",
+                "retry": "Retry",
+                "downloading": "Downloading latest version",
+                "complete": "Download complete",
+                "loading": "Resource loading"
+            },
+            "zh-CN": {
+                "check": "更新检查中",
+                "offline": "请检查网络连接",
+                "fail": "更新失败",
+                "retry": "重试",
+                "downloading": "正在下载最新版本",
+                "complete": "下载完成",
+                "loading": "资源加载中"
+            }
+        }
+        const lang = Language[navigator.language] || Language['en-US'];
+        console.log(navigator.language);
+        console.log(lang);
+        infoDom.innerHTML = lang.check;
+        // const initElectron = new Function("if(!window.Electron) window.Electron = require('electron')");
+        // initElectron();
+        let onLine = true;
+        setInterval(() => {
+            if (!window.navigator.onLine) {
+                onLine = false;
+                infoDom.innerHTML = lang.offline;
+            } else {
+                if (!onLine) {
+                    onLine = true;
+                    infoDom.innerHTML = lang.check;
+                    ipcRenderer.send('updater/startToCheckUpdate');
+                }
+            }
+        }, 2000)
+
+        ipcRenderer.on('updater/errorReply', function(event, arg) {
+            console.log('updater/errorReply');
+            console.log(JSON.parse(arg));
+            infoDom.innerHTML = lang.fail;
+            buttonDom.innerHTML = lang.retry;
+            buttonDom.style.display = 'block';
+            buttonDom.onclick = function() {
+                infoDom.innerHTML = lang.check;
+                buttonDom.style.display = 'none';
+                ipcRenderer.send('updater/startToCheckUpdate');
+            }
+        });
+
+        ipcRenderer.on('updater/updateAvailableReply', function(event, arg) {
+            console.log('updater/updateAvailableReply');
+            console.log(JSON.parse(arg));
+            const data = JSON.parse(arg);
+            infoDom.innerHTML = lang.downloading;
+            ipcRenderer.send('updater/downloadUpdate');
+        });
+
+        ipcRenderer.on('updater/updateNotAvailableReply', function(event, arg) {
+            console.log('updater/updateNotAvailableReply');
+            infoDom.innerHTML = lang.loading;
+            barDom.style.width = '100%';
+            console.log(arg);
+        });
+
+        ipcRenderer.on('updater/downloadProgressReply', function(event, arg) {
+            console.log('updater/downloadProgressReply');
+            const data = JSON.parse(arg);
+            console.log(data);
+            const percent = Number(data.message.percent).toFixed(0);
+            barDom.style.width = percent + '%';
+            infoDom.innerHTML = lang.downloading;
+        });
+
+        ipcRenderer.on('updater/update-downloadedReply', function(event, arg) {
+            console.log('updater/update-downloadedReply');
+            console.log(arg);
+            infoDom.innerHTML = lang.complete;
+            barDom.style.width = '100%';
+            setTimeout(() => {
+                ipcRenderer.send('updater/quitAndInstall');
+            }, 2000)
+        });
+
+        ipcRenderer.send('updater/startToCheckUpdate');
+    </script>
+</body>
+
+</html>

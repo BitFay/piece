@@ -7,6 +7,7 @@ import {PATH_PREFIX, BASE_URL} from '@/env';
 import clsx from 'clsx';
 import {getUser} from '@fay-react/lib/user';
 import Menu from './menu';
+import type from './type';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -36,41 +37,14 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const type: any = {
-  'PNG': 'fil-image',
-  'JPG': 'fil-image',
-  'JPEG': 'fil-image',
-  'gif': 'fil-image',
-  'svg': 'fil-image',
-  'DOC': 'fil-doc',
-  'DOCX': 'fil-doc',
-  'DOTM': 'fil-doc',
-  'DOT': 'fil-doc',
-  'DOTX': 'fil-doc',
-  'DOCB': 'fil-doc',
-  'DOCM': 'fil-doc',
-  'XLS': 'fil-xls',
-  'XLSX': 'fil-xlsx',
-  'PPT': 'fil-ppt',
-  'MP2': 'fil-mp3',
-  'MP3': 'fil-mp3',
-  'MP4': 'fil-mp4',
-  'MOV': 'fil-mov',
-  'MOD': 'fil-mod',
-  'MKV': 'fil-mkv',
-  'ZIP': 'fil-zip',
-  'PDF': 'fil-pdf',
-  'default': 'fil-blank',
-};
-
 export default ({className, data}: any) => {
   const classes = useStyles();
   const [hover, setHover] = React.useState('');
   
-  const handleDownload = async () => {
+  const handleDownload = async (name: string, cid: string) => {
     console.log('download');
     try {
-      const fetchRes = await fetch(BASE_URL+'/files/'+'QmU2PXW7uwdZpFzhqg6EgKR12yeP76Gyb6pZ4uTGmZCKRB', {
+      const fetchRes = await fetch(BASE_URL+'/files/'+cid, {
         method: 'GET',
         // body: {
         //   q: ''
@@ -84,6 +58,7 @@ export default ({className, data}: any) => {
       const link = document.createElement('a')
       link.style.display = 'none'
       link.href = URL.createObjectURL(result)
+      link.download = name;
       document.body.appendChild(link)
       link.click()
       // 释放的 URL 对象以及移除 a 标签
@@ -117,7 +92,7 @@ export default ({className, data}: any) => {
                   {
                     hover===item.cid &&
                     <>
-                      <Button size={"small"} className={classes.downloadBtn} disableElevation color={"primary"} variant={"contained"} onClick={handleDownload}>Download</Button>
+                      <Button size={"small"} className={classes.downloadBtn} disableElevation color={"primary"} variant={"contained"} onClick={() => handleDownload(item.filename, item.cid)}>Download</Button>
                       <Menu data={item} img={img}/>
                     </>
                   }

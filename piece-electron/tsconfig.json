@@ -1,0 +1,17 @@
+{
+  "extends": "@fay-react/tool/config/typescript/tsconfig.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": { "*": ["types/*"] },
+    "outDir": "./pub",
+    "rootDir": "./src",
+    "noEmit": false,
+    "resolveJsonModule": true
+  },
+  "include": [
+    "./src/**/*"
+  ],
+  "exclude": [
+    "./src/main/**/*"
+  ]
+}

@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[24],{"6uXP":function(n,u,t){"use strict";t.r(u);var o=t("jmmT"),e=t("q1tI"),w=t.n(e).a.createElement;u.default=function(){return w(o.a,null,"About us!")}},TXQI:function(n,u,t){(window.__NEXT_P=window.__NEXT_P||[]).push(["/m/about",function(){return t("6uXP")}])}},[["TXQI",0,2,1,3,4]]]);

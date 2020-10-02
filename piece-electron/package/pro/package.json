@@ -1,0 +1,65 @@
+{
+  "name": "keystore",
+  "version": "2.0.0",
+  "description": "keystore electron",
+  "main": "./index.js",
+  "author": "KEYSTORE GROUP CO., LIMITED",
+  "scripts": {
+    "postinstall": "electron-builder install-app-deps",
+    "test": "test"
+  },
+  "license": "ISC",
+  "client": {
+    "name": "${name}-${version}",
+    "ext": "${ext}"
+  },
+  "build": {
+    "productName": "Keystore Enterprise",
+    "artifactName": "${name}-${version}.0.${ext}",
+    "appId": "tech.keystore.neltharion",
+    "buildDependenciesFromSource": false,
+    "nodeGypRebuild": false,
+    "publish": [
+      {
+        "provider": "generic",
+        "url": "http://localhost:8000/assets/download/"
+      }
+    ],
+    "extraResources": {
+      "from": "./assets/build",
+      "to": ""
+    },
+    "mac": {
+      "icon": "assets/logo.png"
+    },
+    "win": {
+      "icon": "assets/logo.png",
+      "target": "nsis",
+      "verifyUpdateCodeSignature": true,
+      "certificateSubjectName": "KEYSTORE GROUP CO., LIMITED",
+      "sign": "C:\\Users\\Administrator\\Desktop\\smartcardtools\\x64\\sign.js",
+      "rfc3161TimeStampServer": "http://timestamp.comodoca.com",
+      "signingHashAlgorithms": ["sha1", "sha256"]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowElevation": true,
+      "perMachine": true,
+      "createStartMenuShortcut": true,
+      "include": "assets/build/installer.nsi"
+    }
+  },
+  "repository": {
+    "type": "git"
+  },
+  "devDependencies": {
+    "electron": "8.2.1",
+    "electron-builder": "22.4.1"
+  },
+  "dependencies": {
+    "@fay-react/node-device": "file:../../node-expand/device",
+    "@fay-react/node-scard": "file:../../node-expand/scard",
+    "electron-store": "5.1.1",
+    "electron-updater": "4.2.5"
+  }
+}

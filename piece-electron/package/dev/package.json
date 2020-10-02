@@ -1,0 +1,56 @@
+{
+  "name": "keystore-dev",
+  "version": "2.0.0",
+  "description": "keystore electron",
+  "main": "./index.js",
+  "author": "",
+  "scripts": {
+    "postinstall": "electron-builder install-app-deps"
+  },
+  "license": "ISC",
+  "build": {
+    "productName": "Keystore Enterprise",
+    "artifactName": "${productName}.${version}.${ext}",
+    "appId": "tech.keystore.neltharion",
+    "buildDependenciesFromSource": false,
+    "nodeGypRebuild": false,
+    "publish": [
+      {
+        "provider": "generic",
+        "url": "http://192.168.100.140/"
+      }
+    ],
+    "extraResources": {
+      "from": "./assets/build",
+      "to": ""
+    },
+    "mac": {
+      "icon": "assets/logo.png"
+    },
+    "win": {
+      "icon": "assets/logo.png",
+      "target": "nsis",
+      "verifyUpdateCodeSignature": false
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowElevation": true,
+      "perMachine": true,
+      "createStartMenuShortcut": true,
+      "include": "assets/build/installer.nsi"
+    }
+  },
+  "repository": {
+    "type": "git"
+  },
+  "devDependencies": {
+    "electron": "8.2.1",
+    "electron-builder": "22.4.1"
+  },
+  "dependencies": {
+    "@fay-react/node-device": "0.0.1-alpha.9",
+    "@fay-react/node-scard": "0.0.1-alpha.2",
+    "electron-store": "5.1.1",
+    "electron-updater": "4.2.5"
+  }
+}

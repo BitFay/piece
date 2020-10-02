@@ -1,15 +1,10 @@
 import React from 'react';
 import {makeStyles} from "@material-ui/core/styles";
 import Snackbar from "@material-ui/core/Snackbar";
-import MuiAlert,{AlertProps} from "@material-ui/lab/Alert";
+import Alert from "@material-ui/lab/Alert";
 import clsx from 'clsx';
 import AddButton from '@/components/button/add';
-import {BASE_URL} from '@/env';
-import {getUser} from '@fay-react/lib/user';
-
-function Alert(props: AlertProps) {
-  return <MuiAlert elevation={6} variant="filled" {...props} />;
-}
+import UploadComponent from './upload-component';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -18,42 +13,26 @@ const useStyles = makeStyles(() => ({
   input: {
     display: 'none',
   },
+  alert: {
+    backgroundColor: '#FFFFFF'
+  }
 }));
 
 export default ({className, onRefresh}: any) => {
   const classes = useStyles();
-  const [error, setError] = React.useState('');
-  const [success, setSuccess] = React.useState(false);
+  const [files, setFiles] = React.useState<any[]>([]);
 
   const handleChange = async (e: any) => {
-    const formData = new FormData();
-    formData.append('file', e.target.files[0]);
-    console.log(getUser());
-    try {
-      const fetchRes = await fetch(BASE_URL+'/files/upload', {
-        method: 'POST',
-        body: formData,
-        headers: {
-          'Authorization': getUser().token
-        }
-      });
-      const result = await fetchRes.json();
-      if(result.error){
-        setError(result.errorCode);
-      }else{
-        setSuccess(true);
-        onRefresh();
-      }
-    } catch (error) {
-      setError('Upload has failed!');
-    }
+    setFiles([...files, e.target.files[0]]);
   }
 
-  const handleClose = () => {
-    setSuccess(false);
-    setError('');
+  const handleComplete = (index: number) => {
+    // files[index] = null;
+    const _files = [...files];
+    _files[index] = null;
+    setFiles(_files);
   }
-
+  const hasNullNumber = files.filter((file) => file===null).length;
   return (
     <div className={clsx(classes.root, className)}>
       <input
@@ -66,14 +45,19 @@ export default ({className, onRefresh}: any) => {
       <label htmlFor="contained-button-file">
         <AddButton onClick={() => document.getElementById('contained-button-file')!.click()}/>
       </label>
-      <Snackbar open={success} autoHideDuration={6000} onClose={handleClose}>
-        <Alert onClose={handleClose} severity="success">
-          Upload was successful!
-        </Alert>
-      </Snackbar>
-      <Snackbar open={error.length>0} autoHideDuration={6000} onClose={handleClose}>
-        <Alert onClose={handleClose} severity="error">
-          {error}
+      <Snackbar open={files.length>0 && files.length>hasNullNumber} anchorOrigin={{vertical: 'top', horizontal: 'right'}}>
+        <Alert className={classes.alert} elevation={6} variant="outlined" icon={false}>
+          {
+            files.map((f: File|null, index: number) => {
+              if(f!==null){
+                return (
+                  <UploadComponent index={index} file={f} key={index} onRefresh={onRefresh} onComplete={handleComplete}/>
+                )
+              }else{
+                return <React.Fragment key={index}></React.Fragment>;
+              }
+            })
+          }
         </Alert>
       </Snackbar>
     </div>

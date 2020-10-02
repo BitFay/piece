@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>KeyPool</title>
+</head>
+
+<body>
+  <form name="confirmationForm" action="/api-keypool/oauth/authorize" method="post" id="form">
+    <input name="user_oauth_approval" value="true" type="hidden"/>
+    <input name="scope.keypool-service" value="true" type="hidden"/>
+    <input name="authorize" value="Authorize" type="submit"/>
+  </form>
+  <script src="../../pollyfill/polyfill.min.js"></script>
+  <script src="../../pollyfill/whatwg-fetch.js"></script>
+  <script>
+    function getCookie(cookie, cname){
+      var name = cname + "=";
+      var ca = cookie.split(';');
+      for(var i=0; i<ca.length; i++) {
+          var c = ca[i].trim();
+          if (c.indexOf(name)==0) { return c.substring(name.length,c.length); }
+      }
+      return "";
+    }
+    var receiveMessage = function (event) {
+      if (event.origin !== window.location.origin && event.origin.indexOf('localhost') < 0)
+      return;
+      var data = event.data;
+      if(data.login){
+        document.cookie = "JSESSIONID="+getCookie(data.cookie, "JSESSIONID")+"; expires=; path=/;";
+        fetch('/api-keypool/oauth/authorize?client_id=clientapp&response_type=code&scope=keypool-service', {redirect: 'manual'})
+        .then(function(response) {
+          if(response.type === "opaqueredirect"){
+            self.location.href = '/api-keypool/oauth/authorize?client_id=clientapp&response_type=code&scope=keypool-service';
+          }else{
+            document.getElementById("form").submit();
+          }
+        });
+      }
+    }
+    window.addEventListener("message", receiveMessage, false);
+    window.parent.postMessage(JSON.stringify({load: true}), "*");
+    window.parent.postMessage({load: true}, "*");
+  </script>
+</body>
+
+</html>

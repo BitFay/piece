@@ -1,0 +1,12 @@
+export const START_LISTENING = 'scard/startListening';
+export const CONNECT = 'scard/connect';
+export const DISCONNECT = 'scard/disconnect';
+export const GET_ID = 'scard/getId';
+export const GET_PUBLIC_KEY = 'scard/getPublicKay';
+export const GET_BACKUP_STATUS = 'scard/getBackupStatus';
+export const BACKUP_KEY_PIECE = 'scard/backupKeyPiece';
+export const MODIFY_PIN_CODE = 'scard/modifyPinCode';
+export const VERIFY_PIN_CODE = 'scard/verifyPinCode';
+export const RESTORE_KEY_PIECE = 'scard/restoreKeyPiece';
+export const RESET = 'scard/reset';
+export const RESET_BACKUP_INFO = 'scard/resetBackupInfo';

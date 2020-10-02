@@ -1,0 +1,1 @@
+type Platform = 'Darwin' | 'Windows_NT' | 'Linux' | undefined;

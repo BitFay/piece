@@ -1,0 +1,6 @@
+{
+  "name": "@fay-react/node-scard",
+  "description": "keystore node scard",
+  "version": "1.0.0",
+  "main": "./index.js"
+}

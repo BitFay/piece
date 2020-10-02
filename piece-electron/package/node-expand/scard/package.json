@@ -1,0 +1,14 @@
+{
+  "name": "@fay-react/node-scard",
+  "description": "keystore node scard",
+  "version": "0.0.1-alpha.2",
+  "main": "./index.js",
+  "license": "MIT",
+  "scripts": {
+    "pub": "npm publish",
+    "postinstall": "node install.js"
+  },
+  "dependencies": {
+    "node-addon-api": "^1.7.1"
+  }
+}

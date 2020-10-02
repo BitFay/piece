@@ -1,0 +1,32 @@
+{
+  "name": "@fay-react/node-device",
+  "version": "0.0.1-mac-Alpha.2",
+  "main": "./bindings.js",
+  "scripts": {
+    "pub": "npm publish",
+    "debug": "nodemon --inspect ./index.js",
+    "clean": "rimraf ./dist ./build"
+  },
+  "dependencies": {
+    "nan": "^2.7.0"
+  },
+  "build": {
+    "files": [
+      "Keystore.node",
+      "bindings.js",
+      "entry.js",
+      "package.json"
+    ]
+  },
+  "cmake-js": {
+    "runtime": "electron",
+    "runtimeVersion": "5.0.2"
+  },
+  "author": "KEYSTORE GROUP CO., LIMITED",
+  "license": "MIT",
+  "devDependencies": {
+    "cmake-js": "^5.1.0",
+    "nodemon": "^1.18.10",
+    "rimraf": "^2.6.3"
+  }
+}

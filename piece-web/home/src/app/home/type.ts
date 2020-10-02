@@ -1,0 +1,28 @@
+const type: any = {
+  'PNG': 'fil-image',
+  'JPG': 'fil-image',
+  'JPEG': 'fil-image',
+  'gif': 'fil-image',
+  'svg': 'fil-image',
+  'DOC': 'fil-doc',
+  'DOCX': 'fil-doc',
+  'DOTM': 'fil-doc',
+  'DOT': 'fil-doc',
+  'DOTX': 'fil-doc',
+  'DOCB': 'fil-doc',
+  'DOCM': 'fil-doc',
+  'XLS': 'fil-xls',
+  'XLSX': 'fil-xlsx',
+  'PPT': 'fil-ppt',
+  'MP2': 'fil-mp3',
+  'MP3': 'fil-mp3',
+  'MP4': 'fil-mp4',
+  'MOV': 'fil-mov',
+  'MOD': 'fil-mod',
+  'MKV': 'fil-mkv',
+  'ZIP': 'fil-zip',
+  'PDF': 'fil-pdf',
+  'default': 'fil-blank',
+};
+
+export default type;

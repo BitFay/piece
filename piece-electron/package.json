@@ -1,0 +1,66 @@
+{
+  "name": "@fay-react/electron",
+  "version": "0.0.1-alpha.21",
+  "description": "keystore electron",
+  "main": "./renderer",
+  "scripts": {
+    "start": "npm run build:dev && cd package/dev/dist && npx electron .",
+    "start:updater": "npm run build:dev && cd package/dev && cp dev-app-update.yml dist && cd dist && npx electron .",
+    "start:pro": "npm run build:pro && cd package/pro/dist && npx electron .",
+    "start:web": "webpack-cli serve --config node_modules/@fay-react/tool/config/webpack/default/dev.js --color --progress",
+    "build:post": "rm -rf ./dist && cp -r ./package/pro/dist/dist .",
+    "build-win32:post": "del .\\dist && mkdir dist && copy .\\package\\pro\\dist\\dist .\\dist",
+    "build": "npm run build:pro && node ./build.js && cd package/pro/dist && npx electron-builder && cd ../../.. && npm run build:post",
+    "build-win32": " npm run build:pro && node ./build.js && cd package/pro/dist && npx electron-builder build -w --ia32 && cd ../../.. && npm run build-win32:post",
+    "pack": "npm run build:pro && cd package/pro/dist && npx electron-builder --dir",
+    "build:dev": "webpack-cli --config node_modules/@fay-react/tool/config/webpack/default/electron.dev.js",
+    "build:pro": "webpack-cli --config node_modules/@fay-react/tool/config/webpack/default/electron.pro.js",
+    "pub:clear": "rm -rf pub ./package/dev/dist ./package/pro/dist",
+    "pub:build": "npm run build:dev && npm run build:pro",
+    "pub:tsc": "node_modules/.bin/tsc && cp -r ./src/@types ./assets pub",
+    "pub:babel": "export NODE_ENV='production' && node_modules/.bin/babel pub --out-dir pub --copy-files",
+    "pub:pre": "npm run pub:tsc && npm run pub:babel && cp package.json README.md pub",
+    "pub": "npm run pub:pre && cd pub && npm publish && cd .. && npm run pub:clear"
+  },
+  "author": "KEYSTORE GROUP CO., LIMITED",
+  "license": "ISC",
+  "repository": {
+    "type": "git"
+  },
+  "browserslist": [
+    "chrome 70"
+  ],
+  "devDependencies": {
+    "@babel/cli": "7.5.5",
+    "@fay-react/tool": "0.0.1-alpha.41",
+    "@types/base64-js": "1.2.5",
+    "@types/uuid": "^3.4.6",
+    "cross-env": "^7.0.0",
+    "electron": "8.2.1",
+    "electron-builder": "22.4.1",
+    "electron-store": "5.1.1",
+    "electron-updater": "4.2.5",
+    "json": "^9.0.6",
+    "react": "^16.10.2",
+    "react-dom": "^16.10.2",
+    "webpack-dev-server": "^3.8.2"
+  },
+  "dependencies": {
+    "@fay-react/lib": "0.0.1-alpha.35",
+    "base32.js": "^0.1.0",
+    "base64-js": "1.3.1",
+    "bitcore-lib-cash": "^8.16.2",
+    "blakejs": "^1.1.0",
+    "bs58": "^4.0.1",
+    "convert-hex": "^0.1.0",
+    "ethereumjs-util": "^6.2.0",
+    "hash.js": "^1.1.7",
+    "int64-buffer": "0.99.1007",
+    "jsrsasign": "^8.0.12",
+    "litecore-lib": "^0.13.22",
+    "node-fetch": "^2.6.0",
+    "secp256k1": "^4.0.0",
+    "sha3": "^2.1.2",
+    "uuid": "^3.3.3"
+  }
+}

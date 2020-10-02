@@ -1,0 +1,7 @@
+{
+  "name": "@fay-react/keystore",
+  "version": "1.0.0",
+  "main": "./bindings.js",
+  "author": "KEYSTORE GROUP CO., LIMITED",
+  "license": "MIT"
+}

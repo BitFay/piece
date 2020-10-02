@@ -1,0 +1,17 @@
+{
+  "name": "KeyPool",
+  "short_name": "KeyPool",
+  "description": "Get Filecoin with Ease",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/m/static/pwa.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ],
+  "theme_color": "#263BE0",
+  "background_color": "#ffffff",
+  "start_url": "/m/",
+  "display": "standalone"
+}

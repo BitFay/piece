@@ -1,0 +1,9 @@
+export const START_TO_CHECK_UPDATE = 'updater/startToCheckUpdate';
+export const CHECKING_FOR_UPDATE = 'updater/checkingForUpdate';
+export const UPDATE_AVAILABLE = 'updater/updateAvailable';
+export const UPDATE_NOT_AVAILABLE = 'updater/updateNotAvailable';
+export const DOWNLOAD_UPDATE = 'updater/downloadUpdate';
+export const QUIT_AND_INSTALL = 'updater/quitAndInstall';
+export const ERROR = 'updater/error';
+export const DOWNLOAD_PROGRESS = 'updater/downloadProgress';
+export const UPDATE_DOWNLOADED = 'updater/update-downloaded';

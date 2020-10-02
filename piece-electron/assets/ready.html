@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <style>
+    .info{
+      position: absolute;
+      bottom: 10px;
+      left: 20px;
+      color: #FFFFFF;
+    }
+    .loading{
+      position: absolute;
+      bottom: 10px;
+      right: 20px;
+      color: #FFFFFF;
+    }
+  </style>
+</head>
+<body style="overflow: hidden">
+  <img src="./ready.jpg" width="100%">
+  <div class="info" id="info">
+    Checking for update...
+  </div>
+  <div class="loading" id="loading">
+    <img src="./rings.svg">
+  </div>
+  <iframe src="https://enterprise.keystore.dev/keystore/assets/images/coding.gif" style="display: none"></iframe>
+  <script>
+    const { ipcRenderer } = require('electron')
+    // const initElectron = new Function("if(!window.Electron) window.Electron = require('electron')");
+    // initElectron();
+    setInterval(() => {
+      if(!window.navigator.onLine){
+        document.getElementById('info').innerHTML = 'please check the network and restart';
+      }
+    }, 2000)
+
+    ipcRenderer.on('updater/errorReply', function (event, arg) {
+      console.log('updater/errorReply');
+      console.log(JSON.parse(arg));
+      document.getElementById('info').innerHTML = `Update failed`;
+    });
+
+    ipcRenderer.on('updater/updateAvailableReply', function (event, arg) {
+      console.log('updater/updateAvailableReply');
+      console.log(JSON.parse(arg));
+      const data = JSON.parse(arg);
+      document.getElementById('info').innerHTML = `Downloading latest version ...`;
+      ipcRenderer.send('updater/downloadUpdate');
+    });
+
+    ipcRenderer.on('updater/updateNotAvailableReply', function (event, arg) {
+      console.log('updater/updateNotAvailableReply');
+      document.getElementById('info').innerHTML = ``;
+      console.log(arg);
+    });
+
+    ipcRenderer.on('updater/downloadProgressReply', function (event, arg) {
+      console.log('updater/downloadProgressReply');
+      const data = JSON.parse(arg);
+      console.log(data);
+      const percent = Number(data.message.percent).toFixed(0);
+      document.getElementById('info').innerHTML = `Downloading latest version ... ${percent}%`;
+    });
+
+    ipcRenderer.on('updater/update-downloadedReply', function (event, arg) {
+      console.log('updater/update-downloadedReply');
+      console.log(arg);
+      document.getElementById('info').innerHTML = `Download complete, ready to install`;
+      setTimeout(() => {
+        ipcRenderer.send('updater/quitAndInstall');
+      }, 2000)
+    });
+
+    ipcRenderer.send('updater/startToCheckUpdate');
+  </script>
+</body>
+</html>
